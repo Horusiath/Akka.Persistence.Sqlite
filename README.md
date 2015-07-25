@@ -30,7 +30,6 @@ Both journal and snapshot store share the same configuration keys (however they 
 - `plugin-dispatcher` (string with configuration path) - describes a message dispatcher for persistent journal. Default: *akka.actor.default-dispatcher*
 - `connection-string` - connection string used to access SQL Server database. Default: *none*.
 - `connection-timeout` - timespan determining default connection timeouts on database-related operations. Default: *30s*
-- `schema-name` - name of the database schema, where journal or snapshot store tables should be placed. Default: *dbo*
 - `table-name` - name of the table used by either journal or snapshot store. Default: *event_journal* (for journal) or *snapshot_store* (for snapshot store)
 - `auto-initialize` - flag determining if journal or snapshot store related tables should by automatically created when they have not been found in connected database. Default: *false*
 
@@ -61,7 +60,7 @@ SQLite persistence plugin defines a default table schema used for both journal a
     |  varchar(255)  | integer(8)  | integer(8) | varchar(255)  |   blob   |
     +----------------+-------------+------------+---------------+----------+
 
-`created_at` column maps to `System.DateTime` value represented by it's ticks.
+`created_at` column maps to `System.DateTime` value represented by it's ticks, to achieve 1 to 1 precision of dates between SQLite and .NET environment.
 
 Underneath Akka.Persistence.Sqlite uses a raw ADO.NET commands. You may choose not to use a dedicated built in ones, but to create your own being better fit for your use case. To do so, you have to create your own versions of `IJournalQueryBuilder` and `IJournalQueryMapper` (for custom journals) or `ISnapshotQueryBuilder` and `ISnapshotQueryMapper` (for custom snapshot store).
 
